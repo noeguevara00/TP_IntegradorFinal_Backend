@@ -14,19 +14,8 @@ import java.util.List;
 import ar.com.codoacodo.entity.Orador;
 import ar.com.codoacodo.interfaces.IOradorRepository;
 
-@WebServlet("/api/orador/nuevo")
-public class NuevoOradorController extends HttpServlet{
+public class Test extends HttpServlet{
 	
-	//enviar por Post todos los datos desde el formulario en el front
-	
-	protected void doPost(
-			HttpServletRequest request, //aca viene todos los datos del front
-			HttpServletResponse response)//aca va hacia el front
-	throws ServletException, IOException{
-		
-		String
-			}
-			
 	public static void main(String[] args) {
 
 	/*
