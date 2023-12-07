@@ -50,10 +50,10 @@ public class Orador {
 	}
 	
 	public void setNombre(String nombre) {
-		if(nombre != null) {
-			this.nombre = nombre;
-		}else {
+		if(nombre == null || nombre.isEmpty()) {
 			this.nombre = "N/D";
+		}else {
+			this.nombre = nombre;
 		}
 	}
  
@@ -62,10 +62,10 @@ public class Orador {
 	}
 	
 	public void setApellido(String apellido) {
-		if(apellido != null) {
-			this.apellido = apellido;
-		}else {
+		if(apellido == null || apellido.isEmpty()) {
 			this.apellido = "N/D";
+		}else {
+			this.apellido = apellido;
 		}
 	}
 	
@@ -74,10 +74,10 @@ public class Orador {
 	}
 	
 	public void setMail(String mail) {
-		if(mail != null) {
-			this.mail = mail;
-		}else {
+		if(mail == null || mail.isEmpty()) {
 			this.mail = "N/D";
+		}else {
+			this.mail = mail;
 		}
 	}
 	
@@ -86,10 +86,10 @@ public class Orador {
 	}
 	
 	public void setTema(String tema) {
-		if(tema != null) {
-			this.tema = tema;
-		}else {
+		if(tema == null || tema.isEmpty()) {
 			this.tema = "N/D";
+		}else {
+			this.tema = tema;
 		}
 	}
 	
@@ -102,8 +102,8 @@ public class Orador {
 	}
 	@Override
 	public String toString() {
-		return "Orador [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", mail=" + mail + ", tema="
-				+ tema + ", fechaAlta=" + fechaAlta + "]";
+		return "\nOrador [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", mail=" + mail + ", tema="
+				+ tema + ", fechaAlta=" + fechaAlta + "]\n";
 	}
 	
 	

@@ -29,13 +29,13 @@ public class NuevoOradorController extends HttpServlet{
 		
 		
 		//respondo al frontend con un json ok
-		System.out.println("ok");
+		System.out.println("Connection ok");
 		
 		
 		
 		
-		/*repository.delete(6L);*/
-		/*Date fechaPrueba = Date.valueOf(LocalDate.now());
+		/*repository.delete(6L);
+		Date fechaPrueba = Date.valueOf(LocalDate.now());
 		
 		LocalDate fechaConvertida = fechaPrueba.toLocalDate();
 		
@@ -43,63 +43,66 @@ public class NuevoOradorController extends HttpServlet{
 	
 		System.out.println("Fecha Prueba "+fechaPrueba.toLocalDate().atStartOfDay(ZoneId.systemDefault()));
 		
-		/*.getDate(6).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();*/
+		.getDate(6).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();*/
 		
 		
 		//interface i = new ClaseQueImplementa()..
 		
 		
 		//Trae un orador de la base de datos
-		/*Orador orador = repository.getById(1L);
+//		Orador orador = repository.getById(1L);
+//		
+//		System.out.println(orador);
 		
-		System.out.println(orador);
 		
 		//Insertar un orador con el metodo save() de la interface
 		
-		Orador nuevoOrador = new Orador("Carlita", "Pancha", "carlitaPancha@mail.com", "Que es la pachata", LocalDate.now());
-		
-		System.out.println(nuevoOrador.toString());
-		
-		repository.save(nuevoOrador);*/
+//		Orador nuevoOrador = new Orador("Carlita", "Pancha", "carlitaPancha@mail.com", "Que es la pachata", LocalDate.now());
+//		
+//		System.out.println(nuevoOrador.toString());
+//		
+//		repository.save(nuevoOrador);
 		
 				
-		//Se elimina registro de la DB
+		//Se elimina registro Panchita de la DB!
+	//	repository.delete(19L);
 		
+		//Se despliega lista de oradores para ver que ya no esta Panchita
 		
-		//Se despliega lista de oradores
-		List<Orador> listado = repository.findAll();
-		
-		System.out.println(listado);
-		
-		//Elimino a Panchita!
-		//repository.delete(12L);
-		
-		
-		//Vuelvo a listar para ver que ya no esta Panchita
-	//	System.out.println(repository.findAll().toString());
-		
-		
+	  List<Orador> listado = repository.findAll();
+//		  
+//		  listarRegitros(listado);
+		 
 		
 		//Se inserta otro orador con metodo save()
 		
-		//Orador nuevoOrador2 = new Orador("Mickey", "Donald", "mickeydonald@mail.com", "Que es disney", LocalDate.now());
+//		Orador nuevoOrador3 = new Orador("", "Donald", "mickeydonald4@mail.com", "Que es disney", LocalDate.now());
+//		
+//		System.out.println(nuevoOrador3.toString());
+//		
+//		//Lo guardo en la DB		
+//		repository.save(nuevoOrador3);
 		
-		//System.out.println(nuevoOrador2.toString());
+//		repository.delete(21L);
 		
-		//Lo guardo en la DB		
-		//repository.save(nuevoOrador2);
+		//Traigo los datos de ND Donal y setteo el nombre
 		
-		//Traigo los datos de Mickey y setteo el apellido
-		Orador micky = repository.getById(13L);
+		Orador donaldND = repository.getById(23L);
 		
-		micky.setApellido("MouseDeLimon");
+		donaldND.setNombre("Duck");
 		
 		//Actualizo en la BD
-		repository.update(micky);
+		repository.update(donaldND);
+	
 		
 		//Vuelvo a listar los cambios
-		System.out.println(repository.findAll());
+		listarRegitros(listado);
 		
 		
+	}
+	
+	public static void listarRegitros(List listado) {
+		System.out.println("Total de registros: "+listado.size()+"\n-----------------------------------\n"
+				+ ""+listado);
 	}
 }

@@ -35,6 +35,8 @@ public class MySQLOradorRepository implements IOradorRepository {
 			statement.setDate(5, Date.valueOf(LocalDate.now()));
 
 			statement.executeUpdate();// INSERT,UPDATE,DELETE
+			System.out.println("Registro cargado en DB");
+			
 		} catch (Exception e) {
 			throw new IllegalArgumentException("No se pudo crear el orador", e);
 		}
@@ -67,6 +69,8 @@ public class MySQLOradorRepository implements IOradorRepository {
 				
 
 				orador = new Orador(id, nombre, apellido, mail, tema, fecha_alta);
+				
+				System.out.println("Registro "+id+" obtenido");
 
 			}
 		} catch (Exception e) {
@@ -91,6 +95,8 @@ public class MySQLOradorRepository implements IOradorRepository {
 			statement.setLong(5, orador.getId());
 
 			statement.executeUpdate();
+			System.out.println("Registro "+orador.getId()+" actualizado");
+			
 		} catch (Exception e) {
 			throw new IllegalArgumentException("No se pudo actualizar el orador", e);
 		}
@@ -107,6 +113,8 @@ public class MySQLOradorRepository implements IOradorRepository {
 			statement.setLong(1, id);
 			 
 			statement.executeUpdate();//para ejecutar INSERT, UPDATE Y DELETE
+			System.out.println("Registro "+id+" eliminado");
+			
 		} catch (Exception e) {
 			throw new IllegalArgumentException("No se pudo eliminar el orador", e);
 		}
@@ -134,6 +142,7 @@ public class MySQLOradorRepository implements IOradorRepository {
 
 				Orador orador = new Orador(_id, nombre, apellido, mail, tema, LocalDate.now());/* tph fechaAlta de java.sql.Date a LocalDate */
 				oradores.add(orador);
+				
 			}
 		} catch (Exception e) {
 			throw new IllegalArgumentException("No se pudo obtener el orador", e);
@@ -144,5 +153,6 @@ public class MySQLOradorRepository implements IOradorRepository {
 
 	// implementar todos los metodos de la interface
 	
-	
+
 }
+
