@@ -44,6 +44,11 @@ public class Orador {
 	public Long getId() {
 		return id;
 	}
+	
+	public void setId(Long id) {
+		this.id= id;
+		
+	}
 
 	public String getNombre() {
 		return this.nombre;
@@ -105,6 +110,7 @@ public class Orador {
 		return "\nOrador [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", mail=" + mail + ", tema="
 				+ tema + ", fechaAlta=" + fechaAlta + "]\n";
 	}
+
 	
 	
 }

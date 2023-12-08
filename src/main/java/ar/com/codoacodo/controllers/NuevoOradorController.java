@@ -1,124 +1,101 @@
 package ar.com.codoacodo.controllers;
 
-import ar.com.codoacodo.repository.*;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import ar.com.codoacodo.entity.Orador;
+import ar.com.codoacodo.repository.MySQLOradorRepository;
+import ar.com.codoacodo.interfaces.IOradorRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
-
-import ar.com.codoacodo.entity.Orador;
-import ar.com.codoacodo.interfaces.IOradorRepository;
-
-@WebServlet("/api/orador/nuevo")
+@WebServlet("/api/orador")
 public class NuevoOradorController extends HttpServlet{
 	
-	//enviar por Post todos los datos desde el formulario en el front
+	private IOradorRepository repository = new MySQLOradorRepository();		
+	
+	//enviar por POST todos los datos desde el formulario en el front
 	
 	protected void doPost(
-			HttpServletRequest request, //aca viene todos los datos del front
-			HttpServletResponse response)//aca va hacia el front
-	throws ServletException, IOException{
+			HttpServletRequest request,//aca viene todos lo del front 
+			HttpServletResponse response)  //aca va hacia el front
+					throws ServletException, IOException {
 		
-		String
-			}
-			
-	public static void main(String[] args) {
+		//obtengo el json desde el frontend
+		String json = request.getReader()//capturamos desde el request n un json, capturamos o pedimos las lineas y le pedimos que recolecte como 
+				.lines()
+				.collect(Collectors.joining(System.lineSeparator()));//spring
+		
+		//convierto de json String a Objecto java usando libreria de jackson2
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new JavaTimeModule());
+		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		OradorRequest oradorRequest = mapper.readValue(json, OradorRequest.class);
+		
+		//grabamos en db	
+		Orador orador = new Orador(oradorRequest.getNombre(), 
+				oradorRequest.getApellido(), 
+				oradorRequest.getMail(), 
+				oradorRequest.getTema(), 
+				LocalDate.now());
+		
+		repository.save(orador);
+		
+		response.setStatus(HttpServletResponse.SC_CREATED);//201
+		
+		//convierto ahora Objeto java a String
+		//enviar por medio de response al frontend
+		response.getWriter().print(mapper.writeValueAsString(orador));
+	}
 
-	/*
-		String nombre = "Noe";
-		String apellido = "Gue";
-		String email = "noegue@mail.com";
-		String tema = "temaX";
-	
-		//validaciones
-		/*if(nombre == null || apellido == null || email == null || tema == null) {
-			//response json de error
-		}*/
+	protected void doGet(
+			HttpServletRequest request, 
+			HttpServletResponse response) throws ServletException, IOException {
 		
+		List<Orador> oradores = this.repository.findAll();
 		
-		IOradorRepository repository = new MySQLOradorRepository();
+		//convierto de json String a Objecto java usando libreria de jackson2
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new JavaTimeModule());
+		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		
+		String jsonParaEnviarAlFrontend = mapper.writeValueAsString(oradores);
 		
-		//respondo al frontend con un json ok
-		System.out.println("Connection ok");
-		
-		
-		
-		
-		/*repository.delete(6L);
-		Date fechaPrueba = Date.valueOf(LocalDate.now());
-		
-		LocalDate fechaConvertida = fechaPrueba.toLocalDate();
-		
-		System.out.println("Fecha convertida "+fechaConvertida);
-	
-		System.out.println("Fecha Prueba "+fechaPrueba.toLocalDate().atStartOfDay(ZoneId.systemDefault()));
-		
-		.getDate(6).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();*/
-		
-		
-		//interface i = new ClaseQueImplementa()..
-		
-		
-		//Trae un orador de la base de datos
-//		Orador orador = repository.getById(1L);
-//		
-//		System.out.println(orador);
-		
-		
-		//Insertar un orador con el metodo save() de la interface
-		
-//		Orador nuevoOrador = new Orador("Carlita", "Pancha", "carlitaPancha@mail.com", "Que es la pachata", LocalDate.now());
-//		
-//		System.out.println(nuevoOrador.toString());
-//		
-//		repository.save(nuevoOrador);
-		
-				
-		//Se elimina registro Panchita de la DB!
-	//	repository.delete(19L);
-		
-		//Se despliega lista de oradores para ver que ya no esta Panchita
-		
-	  List<Orador> listado = repository.findAll();
-//		  
-//		  listarRegitros(listado);
-		 
-		
-		//Se inserta otro orador con metodo save()
-		
-//		Orador nuevoOrador3 = new Orador("", "Donald", "mickeydonald4@mail.com", "Que es disney", LocalDate.now());
-//		
-//		System.out.println(nuevoOrador3.toString());
-//		
-//		//Lo guardo en la DB		
-//		repository.save(nuevoOrador3);
-		
-//		repository.delete(21L);
-		
-		//Traigo los datos de ND Donal y setteo el nombre
-		
-		Orador donaldND = repository.getById(23L);
-		
-		donaldND.setNombre("Duck");
-		
-		//Actualizo en la BD
-		repository.update(donaldND);
-	
-		
-		//Vuelvo a listar los cambios
-		listarRegitros(listado);
-		
-		
+		response.setStatus(HttpServletResponse.SC_OK);
+
+		//escribe la respueta en el objeto response (que despues es lo que recibe el front)
+		response.getWriter().print(jsonParaEnviarAlFrontend );
 	}
 	
-	public static void listarRegitros(List listado) {
-		System.out.println("Total de registros: "+listado.size()+"\n-----------------------------------\n"
-				+ ""+listado);
+	protected void doDelete(
+			HttpServletRequest req, 
+			HttpServletResponse resp) 
+		throws ServletException, IOException {
+		
+		String id = req.getParameter("id");
+		
+		this.repository.delete(Long.parseLong(id));
+		
+		resp.setStatus(HttpServletResponse.SC_OK);//200
+	}
+	
+	//Preflight
+	protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin","*");		
+		response.addHeader("Access-Control-Allow-Methods","POST, GET, OPTIONS, DELETE, HEAD");	
+		response.addHeader("Access-Control-Allow-Headers","X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");	
+	}
+	
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		super.doPut(req, resp);
 	}
 }

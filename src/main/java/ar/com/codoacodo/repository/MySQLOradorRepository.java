@@ -37,6 +37,9 @@ public class MySQLOradorRepository implements IOradorRepository {
 			statement.executeUpdate();// INSERT,UPDATE,DELETE
 			System.out.println("Registro cargado en DB");
 			
+			ResultSet res = statement.getGeneratedKeys();
+//			Long id = res.getLong(1);
+//			orador.setId(id);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("No se pudo crear el orador", e);
 		}
