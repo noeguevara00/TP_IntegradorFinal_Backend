@@ -18,33 +18,38 @@ public class MySQLOradorRepository implements IOradorRepository {
 
 	@Override
 	public void save(Orador orador) {
+
 		String sql = "insert into oradores (nombre, apellido, mail, tema, fecha_alta) values(?,?,?,?,?)";
 
 		try (Connection conn = AdministradorDeConexiones.getConnection()) {// para que conecte desconecte, o sea abrir la conexion y cerrarla automaticamente, solo se pasa
 																			// dentro del try
-			// sql injection!!!
-			PreparedStatement statement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-
-			// cargar los ? con los valores
-			statement.setString(1, orador.getNombre());
-			statement.setString(2, orador.getApellido());
-			statement.setString(3, orador.getMail());
-			statement.setString(4, orador.getTema());
-			/* statement.setDate(5, new java.sql.Date(System.currentTimeMillis())); */ // tph: ver como pasar de
-																						// LocalDate a java.sql.Date
-			statement.setDate(5, Date.valueOf(LocalDate.now()));
-			statement.executeUpdate();// INSERT,UPDATE,DELETE
-			System.out.println("Registro cargado en DB");
 			
-			ResultSet res = statement.getGeneratedKeys();
-			if(res.next()) {	
-			Long id = res.getLong(1);
-     		orador.setId(id);
-			}	
+				// sql injection!!!
+				PreparedStatement statement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	
+								
+				// cargar los ? con los valores
+				statement.setString(1, orador.getNombre());
+				statement.setString(2, orador.getApellido());
+				statement.setString(3, orador.getMail());
+				statement.setString(4, orador.getTema());
+				/* statement.setDate(5, new java.sql.Date(System.currentTimeMillis())); */ // tph: ver como pasar de
+																							// LocalDate a java.sql.Date
+				statement.setDate(5, Date.valueOf(LocalDate.now()));
+				statement.executeUpdate();// INSERT,UPDATE,DELETE
+				System.out.println("Registro cargado en DB");
+				
+				ResultSet res = statement.getGeneratedKeys();
+				if(res.next()) {	
+				Long id = res.getLong(1);
+	     		orador.setId(id);
+				}	
+			
+			
 		} catch (Exception e) {
 			throw new IllegalArgumentException("No se pudo crear el orador", e);
 		}
-		
+	
 	}
 
 	@Override

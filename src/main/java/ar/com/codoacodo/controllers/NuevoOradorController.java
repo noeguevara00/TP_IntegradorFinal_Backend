@@ -81,17 +81,7 @@ public class NuevoOradorController extends HttpServlet {
 		resp.setStatus(HttpServletResponse.SC_OK);// 200
 	}
 
-	// Preflight
-	/*
-	 * protected void doOptions(HttpServletRequest request, HttpServletResponse
-	 * response) throws ServletException, IOException {
-	 * response.addHeader("Access-Control-Allow-Origin","*"); response.addHeader(
-	 * "Access-Control-Allow-Methods","POST, GET, OPTIONS, DELETE, HEAD");
-	 * response.addHeader(
-	 * "Access-Control-Allow-Headers","X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept"
-	 * ); }
-	 */
-
+	
 		protected void doPut(
 			HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException {
