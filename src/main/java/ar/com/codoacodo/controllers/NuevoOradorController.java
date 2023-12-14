@@ -10,16 +10,15 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import ar.com.codoacodo.entity.Orador;
-import ar.com.codoacodo.repository.MySQLOradorRepository;
 import ar.com.codoacodo.interfaces.IOradorRepository;
+import ar.com.codoacodo.repository.MySQLOradorRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/api/orador")
-public class NuevoOradorController extends HttpServlet {
+public class NuevoOradorController extends ControllerPrincipal {
 
 	private IOradorRepository repository = new MySQLOradorRepository();
 
@@ -29,16 +28,15 @@ public class NuevoOradorController extends HttpServlet {
 			HttpServletResponse response) // aca va hacia el front
 			throws ServletException, IOException {
 
-		// obtengo el json desde el frontend
-		String json = request.getReader()// capturamos desde el request en un json, capturamos o pedimos las lineas y le
-											// pedimos que recolecte como
-				.lines().collect(Collectors.joining(System.lineSeparator()));// spring
-
-		// convierto de json String a Objecto java usando libreria de jackson2
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new JavaTimeModule());
-		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-		OradorRequest oradorRequest = mapper.readValue(json, OradorRequest.class);
+		//Captura el id que viene en la url ?id=1
+		String id = request.getParameter("id");//F8
+		
+		//Captura los datos nuevos del orador
+		//Obtengo el json desde el frontend
+		String json = super.toJson(request);
+		
+		//Convierto de json String a Objecto java usando libreria de jackson2
+		OradorRequest oradorRequest = super.mapper.readValue(json, OradorRequest.class);
 
 		// grabamos en db
 		Orador orador = new Orador(oradorRequest.getNombre(), oradorRequest.getApellido(), oradorRequest.getMail(),
@@ -59,16 +57,11 @@ public class NuevoOradorController extends HttpServlet {
 		List<Orador> oradores = this.repository.findAll();
 
 		// convierto de json String a Objecto java usando libreria de jackson2
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new JavaTimeModule());
-		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-		String jsonParaEnviarAlFrontend = mapper.writeValueAsString(oradores);
+		String jsonParaEnviarAlFrontend = super.mapper.writeValueAsString(oradores);
 
 		response.setStatus(HttpServletResponse.SC_OK);
 
-		// escribe la respueta en el objeto response (que despues es lo que recibe el
-		// front)
+		// escribe la respueta en el objeto response (que despues es lo que recibe el front)
 		response.getWriter().print(jsonParaEnviarAlFrontend);
 	}
 
@@ -91,20 +84,15 @@ public class NuevoOradorController extends HttpServlet {
 		
 		//captura los datos nuevos del orador
 		//obtengo el json desde el frontend
-		String json = request.getReader()
-				.lines()
-				.collect(Collectors.joining(System.lineSeparator()));//spring
+		String json = super.toJson(request);//spring
 		
 		//convierto de json String a Objecto java usando libreria de jackson2
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new JavaTimeModule());
-		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-		OradorRequest oradorRequest = mapper.readValue(json, OradorRequest.class);
+		OradorRequest oradorRequest = super.mapper.readValue(json, OradorRequest.class);
 		
 		//busco el orador en la db
 		Orador orador = repository.getById(Long.parseLong(id));
 		
-		//actualizo los datos del orado con los nuevo que viene en el OradorRequest 	
+		//actualizo los datos del orador con los nuevo que viene en el OradorRequest 	
 		orador.setNombre(oradorRequest.getNombre());
 		orador.setApellido(oradorRequest.getApellido()); 
 		orador.setMail(oradorRequest.getMail()); 
